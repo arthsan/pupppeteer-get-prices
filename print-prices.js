@@ -11,24 +11,36 @@ const puppeteer = require('puppeteer');
   });
   await page.goto('http://www.petrobras.com.br/pt/produtos-e-servicos/precos-de-venda-as-distribuidoras/gasolina-e-diesel/', {waitUntil: 'networkidle2'});
   await page.waitForSelector( '.sub-title' );
-  let petPage = await page.evaluate( selector =>
-    {
-      const scrollableSection = document.querySelectorAll( selector );
-      const scrolPos = scrollableSection[2].offsetTop;
+  let image = await page.evaluate(async selector => {
+    const scrollableSection = document.querySelectorAll( selector );
+    const scrolPos = scrollableSection[2].offsetTop;
 
-      const $body = document.querySelector('body');
-      const img = document.createElement('img');
-      const imageUrl = 'https://prontocombustiveis.com.br/assets/img/logotipo-pronto-combustiveis.png';
-      img.src = imageUrl;
-      img.style = 'position: fixed; bottom: 20px; right: 20px'
-      "position: fixed; bottom: 20px; right: 20px"
-      $body.appendChild(img)
+    const $body = document.querySelector('body');
+    const img = document.createElement('img');
+    img.id = 'petrocall';
 
-      window.scrollTo(0, scrolPos-300);
-      return scrolPos;
-      }, scrollable_section );
+    function waitForImageToLoad(imageElement){
+      return new Promise(resolve=>{imageElement.onload = resolve})
+    }
 
-  await page.screenshot({path: 'example.jpg'});
+    const imageUrl2 = 'https://res.cloudinary.com/dgjxsaiee/image/upload/v1562355379/logo-arthur_ki8fgd.png';
+    img.src = imageUrl2;
+    img.style = 'position: fixed; bottom: 20px; right: 20px';
+    
+    await waitForImageToLoad(img)
+    
+    $body.appendChild(img);
+
+    window.scrollTo(0, scrolPos-400);
+    
+    return document.querySelector('#petrocall').complete;
+  }, scrollable_section );
+  console.log(image)
+  await page.waitForSelector('#petrocall', {
+    visible: true
+  })
+
+  await page.screenshot({path: 'example6.jpg'});
   await browser.close();
 })();
 
