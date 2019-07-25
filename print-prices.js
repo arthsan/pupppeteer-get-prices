@@ -23,7 +23,7 @@ const puppeteer = require('puppeteer');
       return new Promise(resolve=>{imageElement.onload = resolve})
     }
 
-    const imageUrl2 = 'https://res.cloudinary.com/dgjxsaiee/image/upload/v1562355379/logo-arthur_ki8fgd.png';
+    const imageUrl2 = 'http://www.petrobras.com.br/sitepetrobras/imgs/bg/logo-social.png';
     img.src = imageUrl2;
     img.style = 'position: fixed; bottom: 20px; right: 20px';
     
